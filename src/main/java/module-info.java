@@ -4,7 +4,9 @@ module com.example.livecricketscorecard {
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
+    requires java.sql;
+    requires mysql.connector.java;
 
-    opens com.example.livecricketscorecard to javafx.fxml;
-    exports com.example.livecricketscorecard;
+    opens com.livecricketscorecard to javafx.fxml;
+    exports com.livecricketscorecard;
 }

@@ -1,4 +1,4 @@
-package com.example.livecricketscorecard;
+package com.livecricketscorecard;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -166,3 +166,7 @@ hs_err_pid*
 
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+
+
+### personal
+DatabaseConfig.java

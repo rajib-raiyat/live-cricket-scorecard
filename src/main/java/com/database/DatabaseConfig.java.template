@@ -1,0 +1,9 @@
+package com.database;
+
+public class DatabaseConfig {
+    static final String SERVER_URL = "SERVER_URL";
+    static final String DB_NAME = "DB_NAME";
+    static final String USERNAME = "USERNAME";
+    static final String PASSWORD = "PASSWORD";
+    static final String DRIVER = "Driver";
+}
