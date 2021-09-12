@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
+import java.util.Objects;
 
 public class migration {
 
@@ -22,6 +22,7 @@ public class migration {
     }
 
     public static void main(String[] args) throws Exception {
+        String db_data_type;
         Connection connection = DatabaseConnection.connect();
         Statement statement = null;
 
@@ -34,18 +35,16 @@ public class migration {
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get("/home/rajib/Documents/rajib/ewu/Summer 2021/cse110/live-cricket-scorecard/dataset/archive/IPL Matches 2008-2020.csv"))) {
             String[] first_line = br.readLine().split(",");
-            String[] second_line = br.readLine().split(",");
+            String[] second_line = br.readLine().split(",", -1);
             StringBuilder sql_query = new StringBuilder();
 
             System.out.println("Enter the table name: ");
             Scanner sc = new Scanner(System.in);
             String table_name = sc.next();
 
-            sql_query.append("CREATE TABLE `+ ").append(table_name).append("` (");
+            sql_query.append("CREATE TABLE `").append(table_name).append("` (");
 
             for (int i = 0; i < first_line.length; i++) {
-                String db_data_type;
-
                 first_line[i] = first_line[i].replace("\"", "");
                 second_line[i] = second_line[i].replace("\"", "");
 
@@ -55,8 +54,13 @@ public class migration {
                     db_data_type = "VARCHAR(600)";
                 }
 
+                if (Objects.equals(first_line[i], "id")) {
+                    first_line[i] = "match_id";
+                }
+
                 sql_query.append("`").append(first_line[i]).append("`").append(" ").append(db_data_type).append(", ");
             }
+
             sql_query.append(")");
             sql_query = new StringBuilder(String.valueOf(sql_query).replace(", )", ");"));
 
