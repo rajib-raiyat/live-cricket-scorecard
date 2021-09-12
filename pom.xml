@@ -70,7 +70,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.livecricketscorecard/com.livecricketscorecard.HelloApplication
+                                com.example.livecricketscorecard/com.livecricketscorecard.LiveCricketScoreCard
                             </mainClass>
                         </configuration>
                     </execution>
