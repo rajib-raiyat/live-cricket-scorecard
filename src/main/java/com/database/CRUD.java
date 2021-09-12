@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class CRUD {
-
-
     private static final Connection connection = DatabaseConnection.connect();
     private static Statement statement = null;
 
