@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
@@ -26,7 +27,6 @@ public class migration {
         String db_data_type;
         Connection connection = DatabaseConnection.connect();
         Statement statement = null;
-        Boolean match_id = null;
 
         try {
             statement = connection.createStatement();
@@ -63,16 +63,16 @@ public class migration {
 
                 if (Objects.equals(first_line[i], "id")) {
                     first_line[i] = "match_id";
-                    match_id = true;
-                } else {
-                    match_id = false;
                 }
 
                 sql_query_ct.append("`").append(first_line[i]).append("`").append(" ").append(db_data_type).append(", ");
             }
-
             sql_query_ct.append(" PRIMARY KEY (`match_id`))").append(" ENGINE = InnoDB;");
-            statement.executeUpdate(String.valueOf(sql_query_ct));
+
+            if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") == 0) {
+                statement.executeUpdate(String.valueOf(sql_query_ct));
+                System.out.println("`" + table_name + "` table created successfully.");
+            }
 
             sql_query_cd.append("INSERT INTO `").append(table_name).append("`(");
 
@@ -93,7 +93,11 @@ public class migration {
             }
 
             sql_query_cd.append(we).append(")");
-            statement.executeUpdate(String.valueOf(sql_query_cd).replace(",)", ")") + ";");
+
+            ResultSet rs = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + second_line[0] + ";");
+            if (!rs.next()) {
+                statement.executeUpdate(String.valueOf(sql_query_cd).replace(",)", ")") + ";");
+            }
 
             we = new StringBuilder();
             sql_query_cd = new StringBuilder(old);
@@ -106,7 +110,12 @@ public class migration {
                 }
 
                 sql_query_cd.append(we.append(");"));
-                statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
+                ResultSet rs1 = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + line.split(",")[0] + ";");
+
+                if (!rs1.next()) {
+                    statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
+                }
+
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
