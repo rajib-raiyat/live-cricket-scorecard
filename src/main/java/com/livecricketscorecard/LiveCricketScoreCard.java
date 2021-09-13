@@ -10,9 +10,9 @@ import java.io.IOException;
 public class LiveCricketScoreCard extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(LiveCricketScoreCard.class.getResource("main_view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(LiveCricketScoreCard.class.getResource("home_page_view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1048, 642);
+        stage.setTitle("CrickInfo!");
         stage.setScene(scene);
         stage.show();
     }
