@@ -9,4 +9,6 @@ module com.example.livecricketscorecard {
 
     opens com.livecricketscorecard to javafx.fxml;
     exports com.livecricketscorecard;
+    exports com.livecricketscorecard.controller;
+    opens com.livecricketscorecard.controller to javafx.fxml;
 }
