@@ -1,4 +1,4 @@
-package DataMigration;
+package com.database.DataMigration;
 
 import com.database.DatabaseConnection;
 
@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class migration {
+public class Migrate {
 
     private static boolean isNumeric(String str) {
         try {
@@ -105,6 +105,7 @@ public class migration {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.replace("\"", "").replace(", ", "-").replace('\'', '`');
+                SearchMigration.bulk_index(first_line, line);
                 for (String s : line.split(",", -1)) {
                     we.append("'").append(s).append("',");
                 }

@@ -6,6 +6,8 @@ module com.example.livecricketscorecard {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires mysql.connector.java;
+    requires meilisearch.java;
+    requires json.simple;
 
     opens com.livecricketscorecard to javafx.fxml;
     exports com.livecricketscorecard;
