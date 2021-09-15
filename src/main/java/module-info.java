@@ -8,6 +8,7 @@ module com.example.livecricketscorecard {
     requires mysql.connector.java;
     requires meilisearch.java;
     requires json.simple;
+    requires java.desktop;
 
     opens com.livecricketscorecard to javafx.fxml;
     exports com.livecricketscorecard;
