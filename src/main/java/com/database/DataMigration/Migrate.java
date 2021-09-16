@@ -64,11 +64,14 @@ public class Migrate {
 
                 sql_query_ct.append("`").append(first_line[i]).append("`").append(" ").append(db_data_type).append(", ");
             }
-            sql_query_ct.append(" PRIMARY KEY (`match_id`))").append(" ENGINE = InnoDB;");
+
+            sql_query_ct.append(" `live_match` BOOLEAN NOT NULL DEFAULT false,").append(" PRIMARY KEY (`match_id`, `live_match`))").append(" ENGINE = InnoDB;");
+
             if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") == 0) {
                 statement.executeUpdate(String.valueOf(sql_query_ct));
                 System.out.println("`" + table_name + "` table created successfully.");
             }
+            System.out.println("Inserting data into `" + table_name + "` table and search index.");
 
             sql_query_cd.append("INSERT INTO `").append(table_name).append("`(");
 
@@ -116,6 +119,7 @@ public class Migrate {
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
+            System.out.println("Execution successful.");
         }
     }
 
