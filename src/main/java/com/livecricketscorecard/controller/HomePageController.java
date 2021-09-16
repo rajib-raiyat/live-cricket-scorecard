@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class HomePageController {
     @FXML
-    private ListView<?> home_page_list_view;
+    private ListView<?> homepage_list_view;
 
     public static void switchToHomePageScene(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(LiveCricketScoreCard.class.getResource("home_page_view.fxml")));
@@ -32,6 +32,6 @@ public class HomePageController {
 
     @FXML
     void initialize() {
-        assert home_page_list_view != null : "fx:id=\"home_page_list_view\" was not injected: check your FXML file 'home_page_view.fxml'.";
+        assert homepage_list_view != null : "fx:id=\"homepage_list_view\" was not injected: check your FXML file 'home_page_view.fxml'.";
     }
 }
