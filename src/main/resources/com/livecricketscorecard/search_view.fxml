@@ -7,11 +7,11 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="642.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="com.livecricketscorecard.controller.SearchViewController">
-   <TextField fx:id="search_page_search_bar" layoutX="75.0" layoutY="94.0" onAction="#search" prefHeight="35.0"
-              prefWidth="867.0"/>
-   <Button layoutX="946.0" layoutY="94.0" mnemonicParsing="false" onAction="#search" prefHeight="35.0" prefWidth="68.0"
-           text="Search"/>
-   <Button fx:id="back_to_home_page" layoutX="75.0" layoutY="21.0" mnemonicParsing="false" onAction="#back_to_home_page"
-           text="Back"/>
-   <TextFlow fx:id="search_page_result" layoutX="75.0" layoutY="143.0" prefHeight="468.0" prefWidth="867.0"/>
+    <TextField fx:id="search_page_search_bar" layoutX="75.0" layoutY="94.0" onAction="#search" prefHeight="35.0"
+               prefWidth="867.0"/>
+    <Button layoutX="946.0" layoutY="94.0" mnemonicParsing="false" onAction="#search" prefHeight="35.0" prefWidth="68.0"
+            text="Search"/>
+    <Button fx:id="back_to_home_page" layoutX="75.0" layoutY="21.0" mnemonicParsing="false"
+            onAction="#back_to_home_page" text="Back"/>
+    <TextFlow fx:id="search_page_result" layoutX="75.0" layoutY="143.0" prefHeight="468.0" prefWidth="867.0"/>
 </AnchorPane>
