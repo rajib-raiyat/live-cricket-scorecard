@@ -10,7 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
-import java.util.Scanner;
+
+import static com.database.DatabaseConfig.DB_TABLE_NAME;
 
 public class Migrate {
 
@@ -35,15 +36,9 @@ public class Migrate {
         }
         assert statement != null;
 
-        System.out.println("Enter the table name: ");
-        Scanner sc = new Scanner(System.in);
-        String table_name = sc.next();
-        sc.nextLine();
+        String table_name = DB_TABLE_NAME;
 
-        System.out.println("Enter the CSV file path: ");
-        String filepath = sc.nextLine();
-
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(filepath))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get("dataset/Matches IPL 2008-2019.csv"))) {
             String[] first_line = br.readLine().split(",");
             String[] second_line = br.readLine().split(",", -1);
             StringBuilder sql_query_ct = new StringBuilder();
@@ -55,8 +50,10 @@ public class Migrate {
                 first_line[i] = first_line[i].replace("\"", "");
                 second_line[i] = second_line[i].replace("\"", "");
 
-                if (isNumeric(second_line[i])) {
+                if (isNumeric(second_line[i]) && !Objects.equals(first_line[i], "season")) {
                     db_data_type = "INTEGER";
+                } else if (Objects.equals(first_line[i], "date") || Objects.equals(first_line[i], "season")) {
+                    db_data_type = "DATE";
                 } else {
                     db_data_type = "VARCHAR(600)";
                 }
@@ -68,7 +65,6 @@ public class Migrate {
                 sql_query_ct.append("`").append(first_line[i]).append("`").append(" ").append(db_data_type).append(", ");
             }
             sql_query_ct.append(" PRIMARY KEY (`match_id`))").append(" ENGINE = InnoDB;");
-
             if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") == 0) {
                 statement.executeUpdate(String.valueOf(sql_query_ct));
                 System.out.println("`" + table_name + "` table created successfully.");
@@ -89,7 +85,7 @@ public class Migrate {
 
 
             for (String s : second_line) {
-                we.append("'").append(s).append("',");
+                StringToDate(we, s);
             }
 
             sql_query_cd.append(we).append(")");
@@ -105,21 +101,33 @@ public class Migrate {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.replace("\"", "").replace(", ", "-").replace('\'', '`');
-                SearchMigration.bulk_index(first_line, line);
+
                 for (String s : line.split(",", -1)) {
-                    we.append("'").append(s).append("',");
+                    StringToDate(we, s);
                 }
 
                 sql_query_cd.append(we.append(");"));
                 ResultSet rs1 = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + line.split(",")[0] + ";");
 
                 if (!rs1.next()) {
+                    SearchMigration.bulk_index(first_line, line);
                     statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
                 }
-
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
+        }
+    }
+
+    private static void StringToDate(StringBuilder we, String s) {
+        if (s.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            s = "STR_TO_DATE('" + s + "', '%d-%m-%Y')";
+            we.append(s).append(",");
+        } else if (s.matches("\\d{4}")) {
+            s = "STR_TO_DATE('" + s + "', '%Y')";
+            we.append(s).append(",");
+        } else {
+            we.append("'").append(s).append("',");
         }
     }
 }
