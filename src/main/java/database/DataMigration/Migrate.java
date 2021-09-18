@@ -123,6 +123,7 @@ public class Migrate {
             }
             System.out.println("Execution successful.");
         }
+        MigrateDeliveries.main();
     }
 
     static void StringToDate(StringBuilder we, String s) {

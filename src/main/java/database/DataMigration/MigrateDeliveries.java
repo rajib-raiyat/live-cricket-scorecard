@@ -18,7 +18,7 @@ import static database.DatabaseConfig.DB_TABLE_NAME;
 
 
 public class MigrateDeliveries {
-    public static void main(String[] args) {
+    public static void main() {
         String db_data_type;
         Connection connection = DatabaseConnection.connect();
         Statement statement = null;
