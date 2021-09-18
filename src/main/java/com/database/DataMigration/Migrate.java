@@ -113,6 +113,7 @@ public class Migrate {
                 ResultSet rs1 = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + line.split(",")[0] + ";");
 
                 if (!rs1.next()) {
+                    SearchMigration.bulk_index(first_line, line);
                     statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
                 }
                 we = new StringBuilder();

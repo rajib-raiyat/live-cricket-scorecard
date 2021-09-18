@@ -9,34 +9,28 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import search.Search;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 public class SearchViewController implements Initializable {
 
-    public Button back_to_home_page;
-    ArrayList<String> words = new ArrayList<>(
-            Arrays.asList("test", "dog", "Human", "Days of our life", "The best day",
-                    "Friends", "Animal", "Human", "Humans", "Bear", "Life",
-                    "This is some text", "Words", "222", "Bird", "Dog", "A few words",
-                    "Subscribe!", "SoftwareEngineeringStudent", "You got this!!",
-                    "Super Human", "Super", "Like")
-    );
+    @FXML
+    private TextArea search_page_result;
 
     @FXML
-    private TextField searchBar;
-
+    private Button back_to_home_page;
     @FXML
-    private ListView<String> listView;
+    private TextField search_page_search_bar;
 
-    public static void switchToSearchScene(ActionEvent event, String search_query) throws IOException {
+    public static void switchToSearchScene(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(LiveCricketScoreCard.class.getResource("search_view.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1048, 642);
@@ -45,33 +39,28 @@ public class SearchViewController implements Initializable {
     }
 
     @FXML
-    public void set_search_test(String search_query) {
-        searchBar.setText(search_query);
-    }
-
-    @FXML
-    void search(ActionEvent event) {
-        listView.getItems().clear();
-        listView.getItems().addAll(searchList(searchBar.getText(), words));
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        listView.getItems().addAll(words);
-    }
-
-    private List<String> searchList(String searchWords, List<String> listOfStrings) {
-
-        List<String> searchWordsArray = Arrays.asList(searchWords.trim().split(" "));
-
-        return listOfStrings.stream().filter(input -> {
-            return searchWordsArray.stream().allMatch(word ->
-                    input.toLowerCase().contains(word.toLowerCase()));
-        }).collect(Collectors.toList());
+    void search() throws Exception {
+        search_page_result.setEditable(false);
+        StringBuilder search = Search.main(search_page_search_bar.getText());
+        search_page_result.clear();
+        search_page_result.appendText(String.valueOf(search));
     }
 
     @FXML
     void back_to_home_page(ActionEvent event) throws IOException {
         HomePageController.switchToHomePageScene(event);
+    }
+
+    @FXML
+    void initialize() {
+        assert search_page_search_bar != null : "fx:id=\"search_page_search_bar\" was not injected: check your FXML file 'search_view.fxml'.";
+        assert search_page_result != null : "fx:id=\"search_page_result\" was not injected: check your FXML file 'search_view.fxml'.";
+        assert back_to_home_page != null : "fx:id=\"back_to_home_page\" was not injected: check your FXML file 'search_view.fxml'.";
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        search_page_result.clear();
+        search_page_search_bar.clear();
     }
 }

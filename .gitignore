@@ -171,3 +171,4 @@ hs_err_pid*
 ### personal
 DatabaseConfig.java
 archive/
+target/*

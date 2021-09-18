@@ -7,15 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class HomePageController {
-
-    public TextField home_page_search;
+    @FXML
+    private ListView<?> homepage_list_view;
 
     public static void switchToHomePageScene(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(LiveCricketScoreCard.class.getResource("home_page_view.fxml")));
@@ -26,11 +26,12 @@ public class HomePageController {
     }
 
     @FXML
-    void search(ActionEvent event) throws IOException {
-        if (Objects.equals(home_page_search.getText(), "")) {
-            System.out.println("please enter your search.");
-        } else {
-            SearchViewController.switchToSearchScene(event, home_page_search.getText());
-        }
+    void search(ActionEvent event) throws Exception {
+        SearchViewController.switchToSearchScene(event);
+    }
+
+    @FXML
+    void initialize() {
+        assert homepage_list_view != null : "fx:id=\"homepage_list_view\" was not injected: check your FXML file 'home_page_view.fxml'.";
     }
 }
