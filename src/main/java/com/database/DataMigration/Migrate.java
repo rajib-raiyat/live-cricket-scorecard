@@ -52,7 +52,8 @@ public class Migrate {
 
                 if (isNumeric(second_line[i]) && !Objects.equals(first_line[i], "season")) {
                     db_data_type = "INTEGER";
-                } else if (Objects.equals(first_line[i], "date") || Objects.equals(first_line[i], "season")) {
+//                } else if (Objects.equals(first_line[i], "date") || Objects.equals(first_line[i], "season")) {
+                } else if (Objects.equals(first_line[i], "date")) {
                     db_data_type = "DATE";
                 } else {
                     db_data_type = "VARCHAR(600)";
@@ -127,10 +128,12 @@ public class Migrate {
         if (s.matches("\\d{2}-\\d{2}-\\d{4}")) {
             s = "STR_TO_DATE('" + s + "', '%d-%m-%Y')";
             we.append(s).append(",");
-        } else if (s.matches("\\d{4}")) {
-            s = "STR_TO_DATE('" + s + "', '%Y')";
-            we.append(s).append(",");
-        } else {
+        }
+//        else if (s.matches("\\d{4}")) {
+//            s = "STR_TO_DATE('" + s + "', '%Y')";
+//            we.append(s).append(",");
+//        }
+        else {
             we.append("'").append(s).append("',");
         }
     }
