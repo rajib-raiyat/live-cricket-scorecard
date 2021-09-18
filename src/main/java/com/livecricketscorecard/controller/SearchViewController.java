@@ -9,15 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import search.Search;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -25,7 +23,7 @@ import java.util.ResourceBundle;
 public class SearchViewController implements Initializable {
 
     @FXML
-    private TextFlow search_page_result;
+    private TextArea search_page_result;
 
     @FXML
     private Button back_to_home_page;
@@ -41,8 +39,11 @@ public class SearchViewController implements Initializable {
     }
 
     @FXML
-    void search(ActionEvent event) throws Exception {
-        ArrayList<HashMap<String, Object>> search = Search.main(search_page_search_bar.getText());
+    void search() throws Exception {
+        search_page_result.setEditable(false);
+        StringBuilder search = Search.main(search_page_search_bar.getText());
+        search_page_result.clear();
+        search_page_result.appendText(String.valueOf(search));
     }
 
     @FXML
@@ -59,6 +60,7 @@ public class SearchViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        search_page_result.clear();
+        search_page_result.clear();
+        search_page_search_bar.clear();
     }
 }
