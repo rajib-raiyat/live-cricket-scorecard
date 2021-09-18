@@ -7,7 +7,7 @@ import com.meilisearch.sdk.Index;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.database.DatabaseConfig.*;
+import static database.DatabaseConfig.*;
 
 public class Search {
     public static StringBuilder main(String search_query) throws Exception {

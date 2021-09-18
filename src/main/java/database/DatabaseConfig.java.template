@@ -1,0 +1,11 @@
+package database;
+
+public class DatabaseConfig {
+    static final String DB_NAME = "test";
+    public static String DB_TABLE_NAME = "DB_TABLE_NAME";
+    static final String USERNAME = "USERNAME";
+    static final String PASSWORD = "PASSWORD";
+    static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static final String SEARCH_URL = "SEARCH_URL";
+    public static final String SEARCH_API_KEY = "SEARCH_API_KEY";
+}
