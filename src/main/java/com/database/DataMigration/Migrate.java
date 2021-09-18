@@ -110,7 +110,7 @@ public class Migrate {
                 }
 
                 sql_query_cd.append(we.append(");"));
-                ResultSet rs1 = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + line.split(",")[0] + ";");
+                ResultSet rs1 = statement.executeQuery("SELECT * FROM " + table_name + " WHERE match_id=" + line.split(",")[0] + ";");
 
                 if (!rs1.next()) {
                     SearchMigration.bulk_index(first_line, line);
