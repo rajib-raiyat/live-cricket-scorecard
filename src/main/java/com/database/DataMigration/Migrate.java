@@ -93,7 +93,7 @@ public class Migrate {
 
             sql_query_cd.append(we).append(")");
 
-            ResultSet rs = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + second_line[0] + ";");
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + table_name + " WHERE match_id=" + second_line[0] + ";");
             if (!rs.next()) {
                 statement.executeUpdate(String.valueOf(sql_query_cd).replace(",)", ")") + ";");
             }
