@@ -48,18 +48,18 @@ public class CRUD {
         ArrayList<Dictionary<String, String>> list = new ArrayList<>();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM `" + DB_TABLE_NAME + "`WHERE" +
                 " live_match=true ORDER BY `ipl_matches`.`date` DESC;");
-        return getListOfDictionary(list, resultSet);
+        return getListOfDictionary(resultSet);
     }
 
     public static ArrayList<Dictionary<String, String>> getMatchList(String count) throws SQLException {
-        ArrayList<Dictionary<String, String>> list = new ArrayList<>();
         ResultSet resultSet = statement.executeQuery(
                 "SELECT * FROM `ipl_matches` ORDER BY `ipl_matches`.`date` DESC LIMIT 0," + count + ";");
-        return getListOfDictionary(list, resultSet);
+        return getListOfDictionary(resultSet);
     }
 
-    private static ArrayList<Dictionary<String, String>> getListOfDictionary(ArrayList<Dictionary<String, String>> list, ResultSet resultSet) throws SQLException {
+    private static ArrayList<Dictionary<String, String>> getListOfDictionary(ResultSet resultSet) throws SQLException {
         ResultSetMetaData md = resultSet.getMetaData();
+        ArrayList<Dictionary<String, String>> list = new ArrayList<>();
 
         while (resultSet.next()) {
             Dictionary<String, String> dataset = new Hashtable<>();
