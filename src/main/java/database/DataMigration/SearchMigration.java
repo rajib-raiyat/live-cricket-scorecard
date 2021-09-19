@@ -19,7 +19,7 @@ public class SearchMigration {
         StringWriter out = new StringWriter();
         obj.writeJSONString(out);
 
-        Client client = new Client(new Config(SEARCH_URL, SEARCH_API_KEY));
+        Client client = new Client(new Config(SEARCH_URL, SEARCH_MASTER_KEY));
         client.index(DB_TABLE_NAME).addDocuments("[" + out + "]");
     }
 }

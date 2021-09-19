@@ -32,10 +32,9 @@ public class MigrateDeliveries {
 
         String table_name = DB_TABLE_NAME + "_deliveries";
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get("dataset/Deliveries IPL 2008-2019.csv"))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get("dataset/deliveries_ipl_2008-2019.csv"))) {
             String[] first_line = br.readLine().split(",");
             String[] second_line = br.readLine().split(",", -1);
-
             StringBuilder sql_query_ct = new StringBuilder();
             StringBuilder sql_query_cd = new StringBuilder();
 
@@ -56,10 +55,10 @@ public class MigrateDeliveries {
             }
             sql_query_ct.append("`deliveries_id` INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (`deliveries_id`), KEY `deliveries_1` (`match_id`), CONSTRAINT `deliveries_1` FOREIGN KEY (`match_id`) REFERENCES `ipl_matches` (`match_id`))").append(" ENGINE = InnoDB;");
 
-            if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") == 0) {
-                statement.executeUpdate(String.valueOf(sql_query_ct));
-                System.out.println("`" + table_name + "` table created successfully.");
-            }
+            DropTable(statement, table_name, sql_query_ct);
+            statement.executeUpdate(String.valueOf(sql_query_ct));
+            System.out.println("`" + table_name + "` table created successfully.");
+
             System.out.println("Inserting data into `" + table_name + "` table.");
 
             sql_query_cd.append("INSERT INTO `").append(table_name).append("`(");
@@ -88,7 +87,6 @@ public class MigrateDeliveries {
                 statement.executeUpdate(String.valueOf(sql_query_cd).replace(",)", ")") + ";");
             }
 
-
             we = new StringBuilder();
             sql_query_cd = new StringBuilder(old);
 
@@ -109,10 +107,23 @@ public class MigrateDeliveries {
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
-            System.out.println("Execution successful.");
+            System.out.println("`" + table_name + "` execution successful.");
 
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    static void DropTable(Statement statement, String table_name, StringBuilder sql_query_ct) throws SQLException {
+
+        if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "_deliveries';") != 0) {
+            System.out.println("`" + table_name + "_deliveries` table already exists, dropping the table.");
+            statement.executeUpdate("DROP TABLES " + table_name + "_deliveries;");
+        }
+
+        if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") != 0) {
+            System.out.println("`" + table_name + "` table already exists, dropping the table.");
+            statement.executeUpdate("DROP TABLES " + table_name + ";");
         }
     }
 }

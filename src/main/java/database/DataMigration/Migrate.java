@@ -39,7 +39,7 @@ public class Migrate {
 
         String table_name = DB_TABLE_NAME;
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get("dataset/Matches IPL 2008-2019.csv"))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get("dataset/matches_ipl_2008-2019.csv"))) {
             String[] first_line = br.readLine().split(",");
             String[] second_line = br.readLine().split(",", -1);
             StringBuilder sql_query_ct = new StringBuilder();
@@ -69,10 +69,10 @@ public class Migrate {
 
             sql_query_ct.append(" `live_match` BOOLEAN NOT NULL DEFAULT false,").append(" PRIMARY KEY (`match_id`, `live_match`))").append(" ENGINE = InnoDB;");
 
-            if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "';") == 0) {
-                statement.executeUpdate(String.valueOf(sql_query_ct));
-                System.out.println("`" + table_name + "` table created successfully.");
-            }
+            MigrateDeliveries.DropTable(statement, table_name, sql_query_ct);
+            statement.executeUpdate(String.valueOf(sql_query_ct));
+            System.out.println("`" + table_name + "` table created successfully.");
+
             System.out.println("Inserting data into `" + table_name + "` table and search index.");
 
             sql_query_cd.append("INSERT INTO `").append(table_name).append("`(");
@@ -82,12 +82,12 @@ public class Migrate {
             }
 
             sql_query_cd.append(")");
+
             sql_query_cd = new StringBuilder(String.valueOf(sql_query_cd).replace(", )", ") VALUES ("));
             StringBuilder we = new StringBuilder();
 
             StringBuilder old = sql_query_cd;
             sql_query_cd = new StringBuilder(String.valueOf(sql_query_cd));
-
 
             for (String s : second_line) {
                 StringToDate(we, s);
@@ -96,6 +96,7 @@ public class Migrate {
             sql_query_cd.append(we).append(")");
 
             ResultSet rs = statement.executeQuery("SELECT * FROM " + table_name + " WHERE match_id=" + second_line[0] + ";");
+
             if (!rs.next()) {
                 statement.executeUpdate(String.valueOf(sql_query_cd).replace(",)", ")") + ";");
             }
@@ -121,7 +122,7 @@ public class Migrate {
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
-            System.out.println("Execution successful.");
+            System.out.println("`" + table_name + "` execution successful.");
         }
         MigrateDeliveries.main();
     }

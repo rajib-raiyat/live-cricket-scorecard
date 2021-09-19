@@ -11,7 +11,7 @@ import static database.DatabaseConfig.*;
 
 public class Search {
     public static StringBuilder main(String search_query) throws Exception {
-        Client client = new Client(new Config(SEARCH_URL, SEARCH_API_KEY));
+        Client client = new Client(new Config(SEARCH_URL, SEARCH_MASTER_KEY));
         Index index = client.index(DB_TABLE_NAME);
         Object[] search = index.search(search_query).getHits().toArray();
 
