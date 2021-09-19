@@ -57,7 +57,6 @@ public class MigrateDeliveries {
 
             DropTable(statement, table_name);
             statement.executeUpdate(String.valueOf(sql_query_ct));
-            System.out.println(sql_query_ct);
 
             System.out.println("`" + table_name + "` table created successfully.");
             System.out.println("Inserting data into `" + table_name + "` table.");
@@ -100,11 +99,8 @@ public class MigrateDeliveries {
                 }
 
                 sql_query_cd.append(we.append(");"));
-                ResultSet rs1 = statement.executeQuery("SELECT * FROM " + table_name + " WHERE match_id=" + line.split(",")[0] + ";");
+                statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
 
-                if (!rs1.next()) {
-                    statement.executeUpdate(String.valueOf(sql_query_cd).replace(",);", ");"));
-                }
                 we = new StringBuilder();
                 sql_query_cd = new StringBuilder(old);
             }
