@@ -1,9 +1,7 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -29,29 +27,55 @@ public class CRUD {
     public static void update() {
     }
 
+    public static Boolean makeMatchLive(String match_id) throws SQLException {
+        String query = "UPDATE `" + DB_TABLE_NAME + "` SET `live_match` = '1' " +
+                "WHERE `" + DB_TABLE_NAME + "`.`match_id` = " + match_id +
+                " AND `" + DB_TABLE_NAME + "`.`live_match` = 0;";
+
+        int r = statement.executeUpdate(query);
+        statement.close();
+        return r == 1;
+    }
+
     public static Dictionary<String, String> getMatchDetailsByID(String match_id) throws SQLException {
         Dictionary<String, String> dataset = new Hashtable<>();
 
         ResultSet resultSet = statement.executeQuery("SELECT * FROM ipl_matches WHERE match_id=" + match_id + ";");
-        return getDateToString(dataset, resultSet);
+        return getDataToString(dataset, resultSet);
     }
 
-    public static Dictionary<String, String> getLiveMatch() throws SQLException {
-        Dictionary<String, String> dataset = new Hashtable<>();
-
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM `" + DB_TABLE_NAME + "`WHERE live_match=true;");
-        return getDateToString(dataset, resultSet);
+    public static ArrayList<Dictionary<String, String>> getLiveMatch() throws SQLException {
+        ArrayList<Dictionary<String, String>> list = new ArrayList<>();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM `" + DB_TABLE_NAME + "`WHERE" +
+                " live_match=true ORDER BY `ipl_matches`.`date` DESC;");
+        return getListOfDictionary(list, resultSet);
     }
 
-    public static Dictionary<String, String> getMatchList(String count) throws SQLException {
-        Dictionary<String, String> dataset = new Hashtable<>();
-
+    public static ArrayList<Dictionary<String, String>> getMatchList(String count) throws SQLException {
+        ArrayList<Dictionary<String, String>> list = new ArrayList<>();
         ResultSet resultSet = statement.executeQuery(
                 "SELECT * FROM `ipl_matches` ORDER BY `ipl_matches`.`date` DESC LIMIT 0," + count + ";");
-        return getDateToString(dataset, resultSet);
+        return getListOfDictionary(list, resultSet);
     }
 
-    private static Dictionary<String, String> getDateToString(Dictionary<String, String> dataset, ResultSet resultSet) throws SQLException {
+    private static ArrayList<Dictionary<String, String>> getListOfDictionary(ArrayList<Dictionary<String, String>> list, ResultSet resultSet) throws SQLException {
+        ResultSetMetaData md = resultSet.getMetaData();
+
+        while (resultSet.next()) {
+            Dictionary<String, String> dataset = new Hashtable<>();
+
+            for (int i = 1; i <= md.getColumnCount(); i++) {
+                String column_name = md.getColumnName(i);
+                String value = resultSet.getString(column_name);
+                dataset.put(column_name, value);
+            }
+            list.add(dataset);
+        }
+
+        return list;
+    }
+
+    private static Dictionary<String, String> getDataToString(Dictionary<String, String> dataset, ResultSet resultSet) throws SQLException {
         int count = resultSet.getMetaData().getColumnCount();
 
         while (resultSet.next()) {

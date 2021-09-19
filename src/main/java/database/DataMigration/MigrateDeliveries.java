@@ -53,12 +53,13 @@ public class MigrateDeliveries {
                 sql_query_ct.append("`").append(first_line[i]).append("`").append(" ").append(db_data_type).append(", ");
 
             }
-            sql_query_ct.append("`deliveries_id` INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (`deliveries_id`), KEY `deliveries_1` (`match_id`), CONSTRAINT `deliveries_1` FOREIGN KEY (`match_id`) REFERENCES `ipl_matches` (`match_id`))").append(" ENGINE = InnoDB;");
+            sql_query_ct.append("`deliveries_id` INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (`deliveries_id`), FOREIGN KEY (`match_id`) REFERENCES `ipl_matches` (`match_id`))").append(" ENGINE = InnoDB;");
 
-            DropTable(statement, table_name, sql_query_ct);
+            DropTable(statement, table_name);
             statement.executeUpdate(String.valueOf(sql_query_ct));
-            System.out.println("`" + table_name + "` table created successfully.");
+            System.out.println(sql_query_ct);
 
+            System.out.println("`" + table_name + "` table created successfully.");
             System.out.println("Inserting data into `" + table_name + "` table.");
 
             sql_query_cd.append("INSERT INTO `").append(table_name).append("`(");
@@ -114,7 +115,7 @@ public class MigrateDeliveries {
         }
     }
 
-    static void DropTable(Statement statement, String table_name, StringBuilder sql_query_ct) throws SQLException {
+    static void DropTable(Statement statement, String table_name) throws SQLException {
 
         if (statement.executeUpdate("SHOW TABLES LIKE '" + table_name + "_deliveries';") != 0) {
             System.out.println("`" + table_name + "_deliveries` table already exists, dropping the table.");

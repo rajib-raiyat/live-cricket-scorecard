@@ -69,7 +69,7 @@ public class Migrate {
 
             sql_query_ct.append(" `live_match` BOOLEAN NOT NULL DEFAULT false,").append(" PRIMARY KEY (`match_id`, `live_match`))").append(" ENGINE = InnoDB;");
 
-            MigrateDeliveries.DropTable(statement, table_name, sql_query_ct);
+            MigrateDeliveries.DropTable(statement, table_name);
             statement.executeUpdate(String.valueOf(sql_query_ct));
             System.out.println("`" + table_name + "` table created successfully.");
 
