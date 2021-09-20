@@ -11,7 +11,7 @@ public class DatabaseDriver {
         if (dataset.isEmpty()) {
             System.out.println("data not found.");
         } else {
-            System.out.println("Get a match details.");
+            System.out.println("Get a match details by match ID.");
             System.out.println(dataset);
         }
 
@@ -21,7 +21,7 @@ public class DatabaseDriver {
         System.out.println(dataset1);
 
         System.out.println();
-        System.out.println("Get current list of latest matches.");
+        System.out.println("Get current list of latest 4 matches.");
         ArrayList<Dictionary<String, String>> dataset2 = CRUD.getMatchList("4");
         System.out.println(dataset2);
 
